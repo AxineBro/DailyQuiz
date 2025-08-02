@@ -6,17 +6,8 @@
     android:viewportWidth="18.91"
     android:viewportHeight="16">
 
-    <group>
-        <clip-path
-            android:pathData="M8 8H10.9091H8Z" />
-    </group>
-    <group>
-        <clip-path
-            android:pathData="M0 0V16H18.9091V0M8 8H10.9091H8Z" />
-        <path
-            android:pathData="M8 8H10.9091H8Z"
-            android:strokeWidth="16"
-            android:strokeCap="round"
-            android:strokeColor="#2B0063" />
-    </group>
+    <path
+        android:pathData="M8 8H10.9091"
+        android:strokeWidth="16"
+        android:strokeColor="#2B0063" />
 </vector>

@@ -2,17 +2,12 @@
 <vector xmlns:android="http://schemas.android.com/apk/res/android"
     xmlns:aapt="http://schemas.android.com/aapt"
     android:width="271.52dp"
-    android:height="0dp"
+    android:height="1dp"
     android:viewportWidth="271.52"
-    android:viewportHeight="0">
+    android:viewportHeight="1">
 
-    <group>
-        <clip-path
-            android:pathData="M0 0H271.516H0Z" />
-        <path
-            android:pathData="M0 0H271.516H0Z"
-            android:strokeWidth="16"
-            android:strokeCap="round"
-            android:strokeColor="#F3F3F3" />
-    </group>
+    <path
+        android:pathData="M0 0H271.516H0Z"
+        android:strokeWidth="16"
+        android:strokeColor="#F3F3F3" />
 </vector>
