@@ -22,6 +22,7 @@ import retrofit2.Retrofit;
 import retrofit2.converter.gson.GsonConverterFactory;
 import retrofit2.http.GET;
 import retrofit2.http.Query;
+import android.text.Html;
 
 public class LoadingActivity extends AppCompatActivity {
 
@@ -79,13 +80,19 @@ public class LoadingActivity extends AppCompatActivity {
         List<Question> questions = new ArrayList<>();
         for (int i = 0; i < apiQuestions.size(); i++) {
             ApiQuestion apiQuestion = apiQuestions.get(i);
-            List<String> options = new ArrayList<>(apiQuestion.getIncorrectAnswers());
-            options.add(apiQuestion.getCorrectAnswer());
+            // Декодируем текст вопроса
+            String decodedQuestion = Html.fromHtml(apiQuestion.getQuestion(), Html.FROM_HTML_MODE_LEGACY).toString();
+            // Декодируем варианты ответа
+            List<String> options = new ArrayList<>();
+            for (String answer : apiQuestion.getIncorrectAnswers()) {
+                options.add(Html.fromHtml(answer, Html.FROM_HTML_MODE_LEGACY).toString());
+            }
+            options.add(Html.fromHtml(apiQuestion.getCorrectAnswer(), Html.FROM_HTML_MODE_LEGACY).toString());
             Collections.shuffle(options);
-            int correctIndex = options.indexOf(apiQuestion.getCorrectAnswer());
+            int correctIndex = options.indexOf(Html.fromHtml(apiQuestion.getCorrectAnswer(), Html.FROM_HTML_MODE_LEGACY).toString());
             questions.add(new Question(
                     i + 1,
-                    apiQuestion.getQuestion(),
+                    decodedQuestion,
                     options,
                     correctIndex,
                     apiQuestion.getCategory(),

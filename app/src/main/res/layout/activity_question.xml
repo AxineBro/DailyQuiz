@@ -118,6 +118,7 @@
             android:textStyle="bold"
             android:gravity="center"
             android:layout_marginTop="12dp"
+            android:textColor="@color/black"
             android:layout_marginBottom="16dp" />
 
         <!-- Варианты -->
@@ -130,21 +131,25 @@
             <RadioButton
                 android:id="@+id/option1"
                 style="@style/QuizRadioButton"
+                android:textColor="@color/black"
                 android:contentDescription="Вариант ответа 1" />
 
             <RadioButton
                 android:id="@+id/option2"
                 style="@style/QuizRadioButton"
+                android:textColor="@color/black"
                 android:contentDescription="Вариант ответа 2" />
 
             <RadioButton
                 android:id="@+id/option3"
                 style="@style/QuizRadioButton"
+                android:textColor="@color/black"
                 android:contentDescription="Вариант ответа 3" />
 
             <RadioButton
                 android:id="@+id/option4"
                 style="@style/QuizRadioButton"
+                android:textColor="@color/black"
                 android:contentDescription="Вариант ответа 4" />
         </RadioGroup>
 

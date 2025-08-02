@@ -19,9 +19,7 @@
         <activity
             android:name=".view.ReviewActivity"
             android:exported="false" />
-        <activity
-            android:name=".view.ResultActivity"
-            android:exported="false" />
+        <activity android:name=".view.ResultActivity" />
         <activity
             android:name=".view.QuestionActivity"
             android:exported="false" />

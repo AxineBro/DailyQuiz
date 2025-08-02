@@ -200,7 +200,7 @@ public class QuestionActivity extends AppCompatActivity {
         intent.putParcelableArrayListExtra("questions", questions);
         intent.putIntegerArrayListExtra("selectedAnswers", selectedAnswers);
         startActivity(intent);
-        finish();
+        //finish();
     }
 
     private void restartQuiz() {
