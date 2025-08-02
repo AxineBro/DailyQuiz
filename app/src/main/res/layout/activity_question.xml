@@ -1,0 +1,227 @@
+<?xml version="1.0" encoding="utf-8"?>
+<RelativeLayout xmlns:android="http://schemas.android.com/apk/res/android"
+    android:layout_width="match_parent"
+    android:layout_height="match_parent"
+    android:background="@color/purple_500">
+
+    <!-- Лого + стрелка -->
+    <RelativeLayout
+        android:id="@+id/header"
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content"
+        android:paddingHorizontal="16dp"
+        android:layout_marginTop="89dp"
+        android:gravity="center_vertical">
+
+        <ImageView
+            android:id="@+id/btn_back"
+            android:layout_width="24dp"
+            android:layout_height="24dp"
+            android:src="@drawable/arrow_back_icon"
+            android:layout_alignParentStart="true"
+            android:contentDescription="Назад" />
+
+        <ImageView
+            android:id="@+id/logo"
+            android:layout_width="wrap_content"
+            android:layout_height="63dp"
+            android:layout_centerHorizontal="true"
+            android:src="@drawable/logo"
+            android:scaleType="fitCenter" />
+    </RelativeLayout>
+
+    <!-- Белая карточка с тестом -->
+    <LinearLayout
+        android:id="@+id/main_card"
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content"
+        android:layout_below="@id/header"
+        android:layout_margin="16dp"
+        android:orientation="vertical"
+        android:background="@drawable/white_card_bg"
+        android:padding="16dp">
+
+        <!-- Таймер -->
+        <RelativeLayout
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content">
+
+            <TextView
+                android:id="@+id/current_time"
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:text="00:00"
+                android:textColor="@color/purple_500"
+                android:textSize="14sp"
+                android:layout_alignParentStart="true" />
+
+            <TextView
+                android:id="@+id/total_time"
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:text="05:00"
+                android:textColor="@color/purple_500"
+                android:textSize="14sp"
+                android:layout_alignParentEnd="true" />
+        </RelativeLayout>
+
+        <ProgressBar
+            android:id="@+id/timer_progress"
+            style="?android:attr/progressBarStyleHorizontal"
+            android:layout_width="match_parent"
+            android:layout_height="6dp"
+            android:layout_marginTop="8dp"
+            android:progressDrawable="@drawable/timer_progress_purple"
+            android:max="300"
+            android:progress="0" />
+
+        <!-- Прогресс -->
+        <TextView
+            android:id="@+id/progress_text"
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            android:text="Вопрос 1 из 5"
+            android:textSize="16sp"
+            android:textColor="@color/gray_888"
+            android:gravity="center"
+            android:layout_marginTop="16dp" />
+
+        <!-- Категория -->
+        <TextView
+            android:id="@+id/category_text"
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            android:text="Категория: Общие знания"
+            android:textSize="14sp"
+            android:textColor="@color/gray_888"
+            android:gravity="center"
+            android:layout_marginTop="8dp" />
+
+        <!-- Сложность -->
+        <TextView
+            android:id="@+id/difficulty_text"
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            android:text="Сложность: Средняя"
+            android:textSize="14sp"
+            android:textColor="@color/gray_888"
+            android:gravity="center"
+            android:layout_marginTop="8dp" />
+
+        <!-- Вопрос -->
+        <TextView
+            android:id="@+id/question_text"
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            android:text="Как переводится слово «apple»?"
+            android:textSize="18sp"
+            android:textStyle="bold"
+            android:gravity="center"
+            android:layout_marginTop="12dp"
+            android:layout_marginBottom="16dp" />
+
+        <!-- Варианты -->
+        <RadioGroup
+            android:id="@+id/options_group"
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            android:orientation="vertical">
+
+            <RadioButton
+                android:id="@+id/option1"
+                style="@style/QuizRadioButton"
+                android:contentDescription="Вариант ответа 1" />
+
+            <RadioButton
+                android:id="@+id/option2"
+                style="@style/QuizRadioButton"
+                android:contentDescription="Вариант ответа 2" />
+
+            <RadioButton
+                android:id="@+id/option3"
+                style="@style/QuizRadioButton"
+                android:contentDescription="Вариант ответа 3" />
+
+            <RadioButton
+                android:id="@+id/option4"
+                style="@style/QuizRadioButton"
+                android:contentDescription="Вариант ответа 4" />
+        </RadioGroup>
+
+        <!-- Результат -->
+        <TextView
+            android:id="@+id/result_text"
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            android:text=""
+            android:gravity="center"
+            android:textSize="16sp"
+            android:layout_marginTop="12dp"
+            android:visibility="gone" />
+
+        <!-- Кнопка Далее -->
+        <Button
+            android:id="@+id/next_button"
+            android:layout_width="wrap_content"
+            android:layout_height="52dp"
+            android:layout_gravity="center"
+            android:layout_marginTop="24dp"
+            android:minWidth="200dp"
+            android:text="ДАЛЕЕ"
+            android:textAllCaps="true"
+            android:enabled="false"
+            android:backgroundTint="@color/gray_888"
+            android:textColor="@color/white" />
+
+    </LinearLayout>
+
+    <!-- Подсказка -->
+    <TextView
+        android:id="@+id/navigation_text"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:layout_below="@id/main_card"
+        android:layout_centerHorizontal="true"
+        android:layout_marginTop="1dp"
+        android:text="Вернуться к предыдущим вопросам нельзя"
+        android:textColor="@color/white"
+        android:textSize="12sp" />
+
+    <!-- Окно "Время вышло" -->
+    <RelativeLayout
+        android:id="@+id/time_up_overlay"
+        android:layout_width="match_parent"
+        android:layout_height="match_parent"
+        android:background="#80000000"
+        android:visibility="gone">
+
+        <LinearLayout
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            android:layout_centerInParent="true"
+            android:layout_margin="32dp"
+            android:background="@drawable/white_card_bg"
+            android:orientation="vertical"
+            android:padding="24dp">
+
+            <TextView
+                android:layout_width="match_parent"
+                android:layout_height="wrap_content"
+                android:layout_marginBottom="16dp"
+                android:gravity="center"
+                android:text="Время вышло! Вы не успели завершить викторину. Попробуйте еще раз!"
+                android:textColor="@color/black"
+                android:textSize="16sp" />
+
+            <Button
+                android:id="@+id/retry_button"
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:layout_gravity="center"
+                android:backgroundTint="@color/purple_500"
+                android:paddingHorizontal="24dp"
+                android:text="НАЧАТЬ ЗАНОВО"
+                android:textColor="@color/white" />
+        </LinearLayout>
+    </RelativeLayout>
+</RelativeLayout>

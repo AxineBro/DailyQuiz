@@ -1,0 +1,58 @@
+<?xml version="1.0" encoding="utf-8"?>
+<RelativeLayout xmlns:android="http://schemas.android.com/apk/res/android"
+    android:layout_width="match_parent"
+    android:layout_height="match_parent"
+    android:background="#7067FF">
+
+    <!-- Логотип -->
+    <RelativeLayout
+        android:id="@+id/logo"
+        android:layout_width="280dp"
+        android:layout_height="63.16dp"
+        android:layout_centerHorizontal="true"
+        android:layout_marginTop="200dp"
+        android:background="@drawable/logo" />
+
+    <!-- Прогресс-бар -->
+    <ProgressBar
+        android:id="@+id/progress_bar"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:layout_centerHorizontal="true"
+        android:layout_below="@id/logo"
+        android:layout_marginTop="175dp" />
+
+    <!-- Панель ошибки внизу -->
+    <RelativeLayout
+        android:id="@+id/error_panel"
+        android:layout_width="match_parent"
+        android:layout_height="100dp"
+        android:layout_alignParentBottom="true"
+        android:background="#D3D3D3"
+    android:visibility="gone">
+
+    <!-- Текст ошибки -->
+    <TextView
+        android:id="@+id/error_text"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:layout_centerHorizontal="true"
+        android:layout_marginTop="10dp"
+        android:text="Ошибка загрузки"
+        android:textSize="16sp"
+        android:textColor="#000000" />
+
+    <!-- Кнопка для повтора -->
+    <Button
+        android:id="@+id/retry_button"
+        android:layout_width="200dp"
+        android:layout_height="40dp"
+        android:layout_centerHorizontal="true"
+        android:layout_below="@id/error_text"
+        android:layout_marginTop="10dp"
+        android:text="Начать викторину"
+        android:textSize="16sp"
+        android:textColor="#FFFFFF"
+        android:background="@drawable/button" />
+    </RelativeLayout>
+</RelativeLayout>

@@ -1,0 +1,100 @@
+<?xml version="1.0" encoding="utf-8"?>
+<RelativeLayout xmlns:android="http://schemas.android.com/apk/res/android"
+    android:layout_width="match_parent"
+    android:layout_height="match_parent"
+    android:background="#7067FF">
+
+    <!-- Кнопка "История" -->
+    <RelativeLayout
+        android:id="@+id/history_but"
+        android:layout_width="103dp"
+        android:layout_height="40dp"
+        android:layout_centerHorizontal="true"
+        android:layout_alignParentTop="true"
+        android:layout_marginTop="100dp"
+        android:background="@drawable/history_but">
+
+        <!-- Контейнер для текста и иконки -->
+        <LinearLayout
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:layout_centerInParent="true"
+            android:orientation="horizontal">
+
+            <!-- Текст "История" -->
+            <TextView
+                android:id="@+id/history_text"
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:text="@string/history_text"
+                android:textAppearance="@style/history_text"
+                android:textStyle="bold" />
+
+            <!-- Иконка истории -->
+            <RelativeLayout
+                android:id="@+id/history_ico"
+                android:layout_width="16dp"
+                android:layout_height="16dp"
+                android:layout_marginLeft="4dp"
+                android:layout_centerVertical="true"
+                android:clipToOutline="true"
+                android:background="@drawable/history_icon" />
+        </LinearLayout>
+    </RelativeLayout>
+
+    <!-- Логотип -->
+    <RelativeLayout
+        android:id="@+id/logo"
+        android:layout_width="280dp"
+        android:layout_height="63.16dp"
+        android:layout_centerHorizontal="true"
+        android:layout_below="@id/history_but"
+        android:layout_marginTop="50dp"
+        android:background="@drawable/logo" />
+
+    <!-- Поп-ап с приветствием и кнопкой -->
+    <RelativeLayout
+        android:id="@+id/pop_up"
+        android:layout_width="320dp"
+        android:layout_height="206dp"
+        android:layout_centerHorizontal="true"
+        android:layout_below="@id/logo"
+        android:layout_marginTop="50dp"
+        android:background="@drawable/pop_up">
+
+        <!-- Заголовок "Добро пожаловать в DailyQuiz!" -->
+        <TextView
+            android:id="@+id/title"
+            android:layout_width="272dp"
+            android:layout_height="wrap_content"
+            android:layout_centerHorizontal="true"
+            android:layout_alignParentTop="true"
+            android:text="@string/title"
+            android:textAppearance="@style/title"
+            android:gravity="center_horizontal"
+            android:layout_marginTop="20dp"
+            android:textStyle="bold" />
+
+        <!-- Кнопка "НАЧАТЬ ВИКТОРИНУ" -->
+        <RelativeLayout
+            android:id="@+id/button"
+            android:layout_width="260dp"
+            android:layout_height="50dp"
+            android:layout_centerHorizontal="true"
+            android:layout_below="@id/title"
+            android:layout_marginTop="30dp"
+            android:background="@drawable/button"
+            android:clickable="true"
+            android:focusable="true">
+
+            <TextView
+                android:id="@+id/button_text"
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:layout_centerInParent="true"
+                android:text="@string/button_text"
+                android:textAppearance="@style/button_text"
+                android:textStyle="bold" />
+        </RelativeLayout>
+    </RelativeLayout>
+</RelativeLayout>

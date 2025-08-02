@@ -1,0 +1,16 @@
+<resources>
+    <string name="app_name">DailyQuiz</string>
+    <string name="history_text">История</string>
+    <string name="title">Добро пожаловать в DailyQuiz!</string>
+    <string name="button_text">НАЧАТЬ ВИКТОРИНУ</string>
+    <string name="navigation_text">Вернуться к предыдущим вопросам нельзя</string>
+    <string name="current_time">00:20</string>
+    <string name="total_time">05:00</string>
+    <string name="progress">Вопрос 1 из 5</string>
+    <string name="question_text">Как переводится слово «apple»?</string>
+    <string name="answer_option_1">Груша</string>
+    <string name="answer_option_2">Яблоко</string>
+    <string name="answer_option_3">Апельсин</string>
+    <string name="answer_option_4">Ананас</string>
+    <string name="next_button_text">Далее</string>
+</resources>

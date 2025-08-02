@@ -1,0 +1,9 @@
+<?xml version="1.0" encoding="utf-8"?>
+<resources>
+    <color name="black">#FF000000</color>
+    <color name="white">#FFFFFFFF</color>
+    <color name="purple_500">#7067FF</color> <!-- Фиолетовый -->
+    <color name="correct_green">#4CAF50</color> <!-- Зелёный для правильного -->
+    <color name="incorrect_red">#F44336</color> <!-- Красный для ошибки -->
+    <color name="gray_888">#888888</color>
+</resources>
