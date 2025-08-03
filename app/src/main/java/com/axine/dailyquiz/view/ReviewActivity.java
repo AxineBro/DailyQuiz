@@ -3,8 +3,7 @@ package com.axine.dailyquiz.view;
 import android.content.Intent;
 import android.graphics.Color;
 import android.graphics.Typeface;
-import android.graphics.drawable.ShapeDrawable;
-import android.graphics.drawable.shapes.OvalShape;
+import android.graphics.drawable.GradientDrawable;
 import android.os.Bundle;
 import android.widget.Button;
 import android.widget.ImageView;
@@ -28,7 +27,9 @@ public class ReviewActivity extends AppCompatActivity {
         TextView messageText = findViewById(R.id.message_text);
         LinearLayout starContainer = findViewById(R.id.star_container);
         LinearLayout questionsContainer = findViewById(R.id.questions_container);
-        Button restartButton = findViewById(R.id.restart_button);
+
+        Button restartButtonTop = findViewById(R.id.restart_button_top);
+        Button restartButtonBottom = findViewById(R.id.restart_button_bottom);
 
         int score = getIntent().getIntExtra("score", 0);
         ArrayList<Question> questions = getIntent().getParcelableArrayListExtra("questions");
@@ -70,11 +71,8 @@ public class ReviewActivity extends AppCompatActivity {
         for (int i = 0; i < 5; i++) {
             ImageView star = new ImageView(this);
             star.setImageResource(i < score ? R.drawable.ic_star_filled : R.drawable.ic_star_empty);
-            LinearLayout.LayoutParams params = new LinearLayout.LayoutParams(
-                    LinearLayout.LayoutParams.WRAP_CONTENT,
-                    LinearLayout.LayoutParams.WRAP_CONTENT
-            );
-            params.setMargins(0, 0, 8, 0);
+            LinearLayout.LayoutParams params = new LinearLayout.LayoutParams(64, 64); // размер иконки
+            params.setMargins(4, 0, 4, 0);
             star.setLayoutParams(params);
             starContainer.addView(star);
         }
@@ -83,44 +81,53 @@ public class ReviewActivity extends AppCompatActivity {
             for (int i = 0; i < questions.size(); i++) {
                 Question question = questions.get(i);
                 int selectedIndex = selectedAnswers.get(i);
-                boolean isCorrect = (selectedIndex != -1 && selectedIndex == question.getCorrectOptionIndex());
 
                 LinearLayout questionLayout = new LinearLayout(this);
                 questionLayout.setLayoutParams(new LinearLayout.LayoutParams(
                         LinearLayout.LayoutParams.MATCH_PARENT,
                         LinearLayout.LayoutParams.WRAP_CONTENT
                 ));
-                questionLayout.setBackgroundResource(R.drawable.rounded_white_background);
+                questionLayout.setBackgroundResource(R.drawable.white_card_bg);
                 questionLayout.setPadding(16, 16, 16, 16);
                 questionLayout.setOrientation(LinearLayout.VERTICAL);
 
                 LinearLayout headerLayout = new LinearLayout(this);
+                headerLayout.setOrientation(LinearLayout.HORIZONTAL);
                 headerLayout.setLayoutParams(new LinearLayout.LayoutParams(
                         LinearLayout.LayoutParams.MATCH_PARENT,
                         LinearLayout.LayoutParams.WRAP_CONTENT
                 ));
-                headerLayout.setOrientation(LinearLayout.HORIZONTAL);
 
                 TextView questionNumber = new TextView(this);
-                questionNumber.setText(String.format("Вопрос %d из 5", i + 1));
-                questionNumber.setTextSize(16);
-                questionNumber.setTextColor(Color.BLACK);
+                questionNumber.setText(String.format("Вопрос %d из %d", i + 1, questions.size()));
+                questionNumber.setTextSize(14);
+                questionNumber.setTextColor(Color.DKGRAY);
+                headerLayout.addView(questionNumber);
+
+                LinearLayout spacer = new LinearLayout(this);
+                LinearLayout.LayoutParams spacerParams = new LinearLayout.LayoutParams(0, 0, 1);
+                spacer.setLayoutParams(spacerParams);
+                headerLayout.addView(spacer);
 
                 ImageView statusIcon = new ImageView(this);
-                statusIcon.setLayoutParams(new LinearLayout.LayoutParams(
-                        LinearLayout.LayoutParams.WRAP_CONTENT,
-                        LinearLayout.LayoutParams.WRAP_CONTENT
-                ));
-                ShapeDrawable circle = new ShapeDrawable(new OvalShape());
-                circle.setIntrinsicWidth(24);
-                circle.setIntrinsicHeight(24);
-                circle.getPaint().setColor(isCorrect ? Color.GREEN : Color.RED);
-                statusIcon.setBackground(circle);
-                statusIcon.setImageResource(isCorrect ? R.drawable.ic_check : R.drawable.ic_cross);
-                statusIcon.setPadding(4, 4, 16, 4);
+                statusIcon.setImageResource(
+                        selectedIndex == question.getCorrectOptionIndex() ?
+                                R.drawable.ic_check : R.drawable.ic_cross
+                );
+                GradientDrawable circleBg = new GradientDrawable();
+                circleBg.setShape(GradientDrawable.OVAL);
+                circleBg.setSize(64, 64);
+                if (selectedIndex == question.getCorrectOptionIndex()) {
+                    circleBg.setColor(Color.parseColor("#4CAF50"));
+                } else {
+                    circleBg.setColor(Color.parseColor("#F44336"));
+                }
+                statusIcon.setBackground(circleBg);
+                int padding = 12;
+                statusIcon.setPadding(padding, padding, padding, padding);
 
-                headerLayout.addView(questionNumber);
                 headerLayout.addView(statusIcon);
+
                 questionLayout.addView(headerLayout);
 
                 TextView questionText = new TextView(this);
@@ -128,42 +135,54 @@ public class ReviewActivity extends AppCompatActivity {
                 questionText.setTextSize(18);
                 questionText.setTypeface(null, Typeface.BOLD);
                 questionText.setTextColor(Color.BLACK);
+                questionText.setPadding(0, 8, 0, 8);
                 questionLayout.addView(questionText);
 
-                TextView userAnswer = new TextView(this);
-                if (selectedIndex == -1) {
-                    userAnswer.setText("Не отвечено");
-                    userAnswer.setCompoundDrawablesWithIntrinsicBounds(R.drawable.ic_cross, 0, 0, 0);
-                    TextView correctAnswer = new TextView(this);
-                    correctAnswer.setText(String.format("Правильный ответ: %s", question.getOptions().get(question.getCorrectOptionIndex())));
-                    correctAnswer.setTextSize(16);
-                    correctAnswer.setTextColor(Color.GREEN);
-                    questionLayout.addView(correctAnswer);
-                } else {
-                    userAnswer.setText(String.format("Ваш ответ: %s", question.getOptions().get(selectedIndex)));
-                    if (isCorrect) {
-                        userAnswer.setCompoundDrawablesWithIntrinsicBounds(R.drawable.ic_check, 0, 0, 0);
-                    } else {
-                        userAnswer.setCompoundDrawablesWithIntrinsicBounds(R.drawable.ic_cross, 0, 0, 0);
-                        TextView correctAnswer = new TextView(this);
-                        correctAnswer.setText(String.format("Правильный ответ: %s", question.getOptions().get(question.getCorrectOptionIndex())));
-                        correctAnswer.setTextSize(16);
-                        correctAnswer.setTextColor(Color.GREEN);
-                        questionLayout.addView(correctAnswer);
+                for (int j = 0; j < question.getOptions().size(); j++) {
+                    TextView optionView = new TextView(this);
+                    optionView.setText(question.getOptions().get(j));
+                    optionView.setTextSize(16);
+                    optionView.setPadding(12, 12, 12, 12);
+                    optionView.setBackgroundResource(R.drawable.option_background);
+                    optionView.setTextColor(Color.BLACK);
+
+                    if (j == selectedIndex && j == question.getCorrectOptionIndex()) {
+                        optionView.setBackgroundResource(R.drawable.correct_option_background);
+                    } else if (j == selectedIndex && j != question.getCorrectOptionIndex()) {
+                        optionView.setBackgroundResource(R.drawable.incorrect_option_background);
+                    } else if (j == question.getCorrectOptionIndex()) {
+                        optionView.setBackgroundResource(R.drawable.correct_option_background);
                     }
+
+                    LinearLayout.LayoutParams lp = new LinearLayout.LayoutParams(
+                            LinearLayout.LayoutParams.MATCH_PARENT,
+                            LinearLayout.LayoutParams.WRAP_CONTENT
+                    );
+                    lp.setMargins(0, 8, 0, 0);
+                    optionView.setLayoutParams(lp);
+
+                    questionLayout.addView(optionView);
                 }
-                userAnswer.setCompoundDrawablePadding(8);
-                questionLayout.addView(userAnswer);
+
+                LinearLayout.LayoutParams questionLp = new LinearLayout.LayoutParams(
+                        LinearLayout.LayoutParams.MATCH_PARENT,
+                        LinearLayout.LayoutParams.WRAP_CONTENT
+                );
+                questionLp.setMargins(0, 0, 0, 16);
+                questionLayout.setLayoutParams(questionLp);
 
                 questionsContainer.addView(questionLayout);
             }
         }
 
-        restartButton.setOnClickListener(v -> {
-            Intent intent = new Intent(this, WelcomeActivity.class);
-            intent.addFlags(Intent.FLAG_ACTIVITY_CLEAR_TOP | Intent.FLAG_ACTIVITY_NEW_TASK);
-            startActivity(intent);
-            finish();
-        });
+        restartButtonTop.setOnClickListener(v -> restartQuiz());
+        restartButtonBottom.setOnClickListener(v -> restartQuiz());
+    }
+
+    private void restartQuiz() {
+        Intent intent = new Intent(this, WelcomeActivity.class);
+        intent.addFlags(Intent.FLAG_ACTIVITY_CLEAR_TOP | Intent.FLAG_ACTIVITY_NEW_TASK);
+        startActivity(intent);
+        finish();
     }
 }

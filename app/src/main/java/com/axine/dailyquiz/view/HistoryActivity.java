@@ -25,6 +25,8 @@ import java.util.List;
 public class HistoryActivity extends AppCompatActivity {
 
     private View mContextMenuView;
+    private LinearLayout historyContainer;
+    private QuizAttemptDao dao;
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
@@ -32,53 +34,11 @@ public class HistoryActivity extends AppCompatActivity {
         setContentView(R.layout.activity_history);
 
         Button backToMenuButton = findViewById(R.id.back_to_menu_button);
-        LinearLayout historyContainer = findViewById(R.id.history_container);
+        historyContainer = findViewById(R.id.history_container);
 
-        AppDatabase db = AppDatabase.getInstance(this);
-        QuizAttemptDao dao = db.quizAttemptDao();
-        List<QuizAttempt> attempts = dao.getAllAttempts();
+        dao = AppDatabase.getInstance(getApplicationContext()).quizAttemptDao();
 
-        historyContainer.removeAllViews();
-
-        if (attempts.isEmpty()) {
-            TextView noAttemptsText = new TextView(this);
-            noAttemptsText.setText("Вы еще не проходили викторины");
-            noAttemptsText.setTextSize(16);
-            noAttemptsText.setPadding(16, 16, 16, 16);
-            historyContainer.addView(noAttemptsText);
-        } else {
-            for (QuizAttempt attempt : attempts) {
-                View historyItem = getLayoutInflater().inflate(R.layout.history_item, null);
-                TextView quizTitle = historyItem.findViewById(R.id.quiz_title);
-                LinearLayout starContainer = historyItem.findViewById(R.id.star_container);
-                TextView quizTime = historyItem.findViewById(R.id.quiz_time);
-                TextView quizDate = historyItem.findViewById(R.id.quiz_date);
-
-                quizTitle.setText("Викторина");
-                SimpleDateFormat timeFormat = new SimpleDateFormat("HH:mm");
-                SimpleDateFormat dateFormat = new SimpleDateFormat("dd/MM/yyyy");
-                Date quizDateObj = new Date(attempt.getTimestamp());
-                quizTime.setText(timeFormat.format(quizDateObj));
-                quizDate.setText(dateFormat.format(quizDateObj));
-
-                starContainer.removeAllViews();
-                for (int i = 0; i < 5; i++) {
-                    ImageView star = new ImageView(this);
-                    star.setImageResource(i < attempt.getScore() ? R.drawable.ic_star_filled : R.drawable.ic_star_empty);
-                    LinearLayout.LayoutParams params = new LinearLayout.LayoutParams(
-                            LinearLayout.LayoutParams.WRAP_CONTENT,
-                            LinearLayout.LayoutParams.WRAP_CONTENT
-                    );
-                    params.setMargins(0, 0, 8, 0);
-                    star.setLayoutParams(params);
-                    starContainer.addView(star);
-                }
-
-                historyItem.setTag(attempt.getId());
-                historyItem.setLongClickable(true);
-                historyContainer.addView(historyItem);
-            }
-        }
+        loadHistory();
 
         backToMenuButton.setOnClickListener(v -> {
             Intent intent = new Intent(this, WelcomeActivity.class);
@@ -86,6 +46,58 @@ public class HistoryActivity extends AppCompatActivity {
             startActivity(intent);
             finish();
         });
+    }
+
+    private void loadHistory() {
+        new Thread(() -> {
+            List<QuizAttempt> attempts = dao.getAllAttempts();
+
+            runOnUiThread(() -> {
+                historyContainer.removeAllViews();
+
+                if (attempts.isEmpty()) {
+                    TextView noAttemptsText = new TextView(this);
+                    noAttemptsText.setText("Вы еще не проходили викторины");
+                    noAttemptsText.setTextSize(16);
+                    noAttemptsText.setPadding(16, 16, 16, 16);
+                    historyContainer.addView(noAttemptsText);
+                } else {
+                    for (QuizAttempt attempt : attempts) {
+                        View historyItem = getLayoutInflater().inflate(R.layout.history_item, historyContainer, false);
+                        TextView quizTitle = historyItem.findViewById(R.id.quiz_title);
+                        LinearLayout starContainer = historyItem.findViewById(R.id.star_container);
+                        TextView quizTime = historyItem.findViewById(R.id.quiz_time);
+                        TextView quizDate = historyItem.findViewById(R.id.quiz_date);
+
+                        quizTitle.setText("Викторина");
+                        SimpleDateFormat timeFormat = new SimpleDateFormat("HH:mm");
+                        SimpleDateFormat dateFormat = new SimpleDateFormat("dd/MM/yyyy");
+                        Date quizDateObj = new Date(attempt.getTimestamp());
+                        quizTime.setText(timeFormat.format(quizDateObj));
+                        quizDate.setText(dateFormat.format(quizDateObj));
+
+                        starContainer.removeAllViews();
+                        for (int i = 0; i < 5; i++) {
+                            ImageView star = new ImageView(this);
+                            star.setImageResource(i < attempt.getScore() ? R.drawable.ic_star_filled : R.drawable.ic_star_empty);
+
+                            LinearLayout.LayoutParams params = new LinearLayout.LayoutParams(
+                                    dpToPx(24),
+                                    dpToPx(24)
+                            );
+                            params.setMargins(0, 0, dpToPx(4), 0);
+                            star.setLayoutParams(params);
+                            starContainer.addView(star);
+                        }
+
+                        historyItem.setTag(attempt.getId());
+                        historyItem.setLongClickable(true);
+                        registerForContextMenu(historyItem);
+                        historyContainer.addView(historyItem);
+                    }
+                }
+            });
+        }).start();
     }
 
     @Override
@@ -97,28 +109,31 @@ public class HistoryActivity extends AppCompatActivity {
 
     @Override
     public boolean onContextItemSelected(MenuItem item) {
-        if (item.getItemId() == 0) {
-            View view = mContextMenuView;
-            Long attemptId = (Long) view.getTag();
+        if (item.getItemId() == 0 && mContextMenuView != null) {
+            Long attemptId = (Long) mContextMenuView.getTag();
 
-            AppDatabase db = AppDatabase.getInstance(this);
-            QuizAttemptDao dao = db.quizAttemptDao();
-            dao.deleteAttempt(attemptId);
+            new Thread(() -> {
+                dao.deleteAttempt(attemptId);
 
-            LinearLayout historyContainer = findViewById(R.id.history_container);
-            historyContainer.removeView(view);
+                runOnUiThread(() -> {
+                    historyContainer.removeView(mContextMenuView);
+                    if (historyContainer.getChildCount() == 0) {
+                        TextView noAttemptsText = new TextView(this);
+                        noAttemptsText.setText("Вы еще не проходили викторины");
+                        noAttemptsText.setTextSize(16);
+                        noAttemptsText.setPadding(16, 16, 16, 16);
+                        historyContainer.addView(noAttemptsText);
+                    }
+                    Toast.makeText(this, "Попытка удалена", Toast.LENGTH_SHORT).show();
+                });
+            }).start();
 
-            if (historyContainer.getChildCount() == 0) {
-                TextView noAttemptsText = new TextView(this);
-                noAttemptsText.setText("Вы еще не проходили викторины");
-                noAttemptsText.setTextSize(16);
-                noAttemptsText.setPadding(16, 16, 16, 16);
-                historyContainer.addView(noAttemptsText);
-            }
-
-            Toast.makeText(this, "Попытка удалена", Toast.LENGTH_SHORT).show();
             return true;
         }
         return super.onContextItemSelected(item);
+    }
+
+    private int dpToPx(int dp) {
+        return Math.round(dp * getResources().getDisplayMetrics().density);
     }
 }

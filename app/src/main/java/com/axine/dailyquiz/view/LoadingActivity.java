@@ -56,7 +56,7 @@ public class LoadingActivity extends AppCompatActivity {
                 .build();
 
         QuizApiService apiService = retrofit.create(QuizApiService.class);
-        Call<QuestionResponse> call = apiService.getQuestions(5, "multiple"); // Теперь корректно
+        Call<QuestionResponse> call = apiService.getQuestions(5, "multiple");
 
         call.enqueue(new Callback<QuestionResponse>() {
             @Override
@@ -80,9 +80,7 @@ public class LoadingActivity extends AppCompatActivity {
         List<Question> questions = new ArrayList<>();
         for (int i = 0; i < apiQuestions.size(); i++) {
             ApiQuestion apiQuestion = apiQuestions.get(i);
-            // Декодируем текст вопроса
             String decodedQuestion = Html.fromHtml(apiQuestion.getQuestion(), Html.FROM_HTML_MODE_LEGACY).toString();
-            // Декодируем варианты ответа
             List<String> options = new ArrayList<>();
             for (String answer : apiQuestion.getIncorrectAnswers()) {
                 options.add(Html.fromHtml(answer, Html.FROM_HTML_MODE_LEGACY).toString());

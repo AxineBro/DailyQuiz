@@ -66,12 +66,11 @@ public class ResultActivity extends AppCompatActivity {
         for (int i = 0; i < 5; i++) {
             ImageView star = new ImageView(this);
             star.setImageResource(i < score ? R.drawable.ic_star_filled : R.drawable.ic_star_empty);
-            LinearLayout.LayoutParams params = new LinearLayout.LayoutParams(
-                    LinearLayout.LayoutParams.WRAP_CONTENT,
-                    LinearLayout.LayoutParams.WRAP_CONTENT
-            );
-            params.setMargins(0, 0, 8, 0);
+
+            LinearLayout.LayoutParams params = new LinearLayout.LayoutParams(64, 64);
+            params.setMargins(4, 0, 4, 0);
             star.setLayoutParams(params);
+
             starContainer.addView(star);
         }
 
@@ -88,7 +87,9 @@ public class ResultActivity extends AppCompatActivity {
 
         reviewButton.setOnClickListener(v -> {
             Intent intent = new Intent(this, ReviewActivity.class);
-            intent.putParcelableArrayListExtra("questions", questions);
+            if (questions != null) {
+                intent.putParcelableArrayListExtra("questions", questions);
+            }
             intent.putExtra("score", score);
             startActivity(intent);
         });

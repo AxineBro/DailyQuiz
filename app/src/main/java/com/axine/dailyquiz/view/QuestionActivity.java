@@ -121,7 +121,7 @@ public class QuestionActivity extends AppCompatActivity {
         questionText.setText(question.getText());
 
         for (int i = 0; i < optionsGroup.getChildCount(); i++) {
-            optionsGroup.getChildAt(i).setBackgroundColor(0);
+            optionsGroup.getChildAt(i).setBackgroundResource(R.drawable.option_background);
         }
 
         ((RadioButton) findViewById(R.id.option1)).setText(question.getOptions().get(0));
@@ -155,13 +155,11 @@ public class QuestionActivity extends AppCompatActivity {
 
         int correctIndex = question.getCorrectOptionIndex();
         RadioButton correctRadio = (RadioButton) optionsGroup.getChildAt(correctIndex);
-        correctRadio.setBackgroundColor(getResources().getColor(R.color.correct_green));
+        correctRadio.setBackgroundResource(R.drawable.correct_option_background);
 
         if (!isCorrect) {
-            selectedRadioButton.setBackgroundColor(getResources().getColor(R.color.incorrect_red));
-        }
-
-        if (isCorrect) {
+            selectedRadioButton.setBackgroundResource(R.drawable.incorrect_option_background);
+        } else {
             score++;
         }
 
@@ -192,15 +190,20 @@ public class QuestionActivity extends AppCompatActivity {
         while (selectedAnswers.size() < questions.size()) {
             selectedAnswers.add(-1);
         }
-        AppDatabase.getInstance(this).quizAttemptDao().insert(
-                new QuizAttempt(score, System.currentTimeMillis())
-        );
-        Intent intent = new Intent(this, ResultActivity.class);
-        intent.putExtra("score", score);
-        intent.putParcelableArrayListExtra("questions", questions);
-        intent.putIntegerArrayListExtra("selectedAnswers", selectedAnswers);
-        startActivity(intent);
-        //finish();
+
+        new Thread(() -> {
+            AppDatabase.getInstance(getApplicationContext())
+                    .quizAttemptDao()
+                    .insert(new QuizAttempt(score, System.currentTimeMillis()));
+
+            runOnUiThread(() -> {
+                Intent intent = new Intent(QuestionActivity.this, ResultActivity.class);
+                intent.putExtra("score", score);
+                intent.putParcelableArrayListExtra("questions", questions);
+                intent.putIntegerArrayListExtra("selectedAnswers", selectedAnswers);
+                startActivity(intent);
+            });
+        }).start();
     }
 
     private void restartQuiz() {
